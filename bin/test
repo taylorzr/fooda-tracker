@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+case $1 in
+  get)
+    curl localhost:8081/orders/zach.taylor@avant.com
+    ;;
+  create)
+    curl localhost:8081/orders -X POST -d '{"ordered_at":"2014-11-15T09:03:48.537930194Z", "email":"zach.taylor@avant.com"}'
+    ;;
+  *)
+    echo "You have to tell me what to do!!!"
+    exit 1
+    ;;
+esac

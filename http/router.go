@@ -1,30 +1,30 @@
 package http
 
-import(
+import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/taylorzr/fooda-tracker/fooda"
 	"github.com/taylorzr/fooda-tracker/db"
+	"github.com/taylorzr/fooda-tracker/fooda"
 )
 
 func Router() *gin.Engine {
 	router := gin.Default()
 	router.GET("/", hello)
-	router.GET("/orders", getOrder)
+	router.GET("/orders/:email", getOrder)
 	router.POST("/orders", createOrder)
 	return router
 }
 
 func hello(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"response":  "Hello World",
+		"response": "Hello World",
 	})
 }
 
 func getOrder(c *gin.Context) {
-	c.JSON(200, db.GetOrder("zach.taylor@avant.com"))
+	c.JSON(200, db.GetOrder(c.Param("email")))
 }
 
 func createOrder(c *gin.Context) {

@@ -26,8 +26,7 @@ func init() {
 func GetOrder(email string) fooda.Order {
 	var order fooda.Order
 
-	// db.First(&order, 1)
-	db.First(&order, "email = ?", "zach.taylor@avant.com")
+	db.First(&order, "email = ?", email)
 
 	return order
 }
