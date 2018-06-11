@@ -34,3 +34,12 @@ func GetOrder(email string) fooda.Order {
 func CreateOrder(order *fooda.Order) {
 	db.Create(order)
 }
+
+func LastRun() {
+	var order fooda.Order
+
+	// TODO: Is this a valid method?
+	db.Last(&order)
+
+	return order
+}
