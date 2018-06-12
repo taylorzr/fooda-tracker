@@ -1,6 +1,8 @@
 package db
 
 import(
+	"time"
+
   "github.com/jinzhu/gorm"
 
 	"github.com/taylorzr/fooda-tracker/fooda"
@@ -20,7 +22,10 @@ func init() {
 	// defer db.Close()
 
 	// Migrate the schema
-	db.AutoMigrate(&fooda.Order{})
+	db.AutoMigrate(
+		&fooda.Order{},
+		&fooda.User{},
+	)
 }
 
 func GetOrder(email string) fooda.Order {
@@ -31,15 +36,51 @@ func GetOrder(email string) fooda.Order {
 	return order
 }
 
-func CreateOrder(order *fooda.Order) {
-	db.Create(order)
-}
+func CreateOrder(email string, orderedAt time.Time) fooda.Order {
+	user := findOrCreateUser(email)
 
-func LastRun() {
-	var order fooda.Order
-
-	// TODO: Is this a valid method?
-	db.Last(&order)
+	// TODO: Correct syntax?!?
+	order := fooda.Order{ OrderedAt: orderedAt, User: user }
+	db.Create(&order)
 
 	return order
+}
+
+func LastRun() time.Time {
+	var run fooda.Run
+
+	// TODO: Is this a valid method?
+	db.Last(&run)
+
+	return run.CreatedAt
+}
+
+func TodaysOrders() []fooda.Order {
+	var orders []fooda.Order
+
+	// TODO: Find orders for today only!!!
+	db.Find(&orders)
+
+	return orders
+}
+
+func AllUsers() []fooda.User {
+	var users []fooda.User
+
+	db.Find(&users)
+
+	return users
+}
+
+func findOrCreateUser(email string) fooda.User {
+	var user fooda.User
+
+	db.First(&user, "email = ?", email)
+
+	if user.ID == 0 {
+		user = fooda.User{ Email: email }
+		db.Create(&user)
+	}
+
+	return user
 }

@@ -2,11 +2,11 @@ package http
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/taylorzr/fooda-tracker/db"
-	"github.com/taylorzr/fooda-tracker/fooda"
 )
 
 func Router() *gin.Engine {
@@ -28,15 +28,22 @@ func getOrder(c *gin.Context) {
 }
 
 func createOrder(c *gin.Context) {
-	var order fooda.Order
+	var orderRequest OrderRequest
 
-	err := c.BindJSON(&order)
+	err := c.BindJSON(&orderRequest)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	db.CreateOrder(&order)
+	order := db.CreateOrder(orderRequest.Email, orderRequest.OrderedAt)
 
 	c.JSON(201, order)
 }
+
+type (
+	OrderRequest struct {
+		OrderedAt time.Time `json:"ordered_at"`
+		Email string `json:"email"`
+	}
+)
