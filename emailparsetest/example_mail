@@ -1,0 +1,57 @@
+Return-Path: <taylorzr@gmail.com>
+Received: from mail-wr0-f174.google.com (mail-wr0-f174.google.com [209.85.128.174])
+ by inbound-smtp.us-east-1.amazonaws.com with SMTP id 2v8rtg0ogu5otvi9vb1d6jtpndd050kc8v65so01
+ for fooda@inthoughtdesign.com;
+ Sun, 17 Jun 2018 22:03:02 +0000 (UTC)
+Received-SPF: pass (spfCheck: domain of _spf.google.com designates 209.85.128.174 as permitted sender) client-ip=209.85.128.174; envelope-from=taylorzr@gmail.com; helo=mail-wr0-f174.google.com;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of _spf.google.com designates 209.85.128.174 as permitted sender) client-ip=209.85.128.174; envelope-from=taylorzr@gmail.com; helo=mail-wr0-f174.google.com;
+ dkim=pass header.i=@gmail.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFFVDloZ0U2aThWM1pzWlhiUzVVc3o2MDJzMzZiRWJzaGtJYzJDNzI1VG93TEhCaWpPRVNRRGtTcjh4ak9STzJzQzlOK3k4T3lSS1VOd01qcVVFY1h0LzRTMDArY01IUnNQNXdHdlUxdG05LzVGOUxJRVEyVlhtaGd1WXRhVG9rZ3VPa29ialIxMnYrN0grY1hMOFlZbE9KeGRRTVQvZEVyL3lkVXVoSm83ZGsxdU9ESC94bDRiazgvQmlpWWR5WGF5NEdFVXVydS82QkYybFN0cWk5N294VFlSdjVIb1BNMEl0MTdmSGEvNlI5OHp5Y0twemVtdW4vWUdKZDlRYis2R0xNNlZFMW5nTTl4R1ZsR3dhZ3JwbTVUNEZDbnN4YWN5TC9UMWQxUjRIN3c9PQ==
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=VTPpWolQcLT6zWZVDNAGBGTn+ZSQ12KABUo+TlDkC62Xh7up769gk1aoi925fl64WsOak0fWShRg08MdCZz0sFLo2rmvVZcyoIVRtYzxs8QU3F9YDqGT6z7yEDEMYkk4eIQ+9SkJGlBf7qifZjSsmcVHeOoeEXozlyONAeVHNR0=; c=relaxed/simple; s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1529272982; v=1; bh=5UluXqLIEbLHQfLr63vJXe5CiwsUI4AcRGslnfFavpE=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+Received: by mail-wr0-f174.google.com with SMTP id f16-v6so14819415wrm.3
+        for <fooda@inthoughtdesign.com>; Sun, 17 Jun 2018 15:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=5UluXqLIEbLHQfLr63vJXe5CiwsUI4AcRGslnfFavpE=;
+        b=odB3eODkeoIEjE/5gdi7jJAgPn10qGHL43e9TeHibTHJaTMr0XWNGIoWzQ3CIDOWNM
+         jU/qz1WxHjJmu5P8QdIqOWudjL4f6hAn1wOAt504m+rO3k2sCsovLUf2nQ5QQBojkhUZ
+         nkVXtgW9drKM3xB4n0OFi0u07U+FmXIwXKvQhEAJbA72lidW6zke+BbeKdRhNaoI12jT
+         2yFfOAoZ33nUWA2fzPYL/MtLNfp8z7Ys6YnbX3Xu8WBEoDpT7Na/LtBZ3VCdh0uzFom+
+         0BfYLh2BCdcN/m766hdBvszjiVUmjXiTVJ1ce2QaL1Sa7MHKupRX74YIYP1M1bamPrHU
+         0Wng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=5UluXqLIEbLHQfLr63vJXe5CiwsUI4AcRGslnfFavpE=;
+        b=H6qyi0Ra3Bp8ipXOdeM9ny4aVA/eE3Jabx1K8Mx1qWwhh4Vu3Shfn/IymbGUTRAaYE
+         yMd4inLst23O1Ws6ZuOYCqzQ5psnA9ppmgYRGJ6Jk3X4sWmomZxCb11U54nkIT5ORboW
+         96gNE6ETAmeT8RoEa02Ov1rwrNnC/DqzQIQcBrqr07K2U/UzFPEeYBtsWdEhxzkSBxx1
+         5UZPHprbu/eQH6+pAlsnTWmO7FPG4n8NiIU8Ci47/KBq3ZBzbUpLgY+6NRZd8oHIgiMw
+         4KwqYiyM+hqht2/gln+XECCzHOGY7PkJP+aMwGw5p8s5Qd6aIXqW4OTNt0KbYibQKVxG
+         RT0g==
+X-Gm-Message-State: APt69E1mGMmev1PED0Agb33gNk0UU6k9eQVz47K5E1XiyIvJHMWVqsC1
+	/AQf7nVrq2qXMcsnzBOCNGBajWT3Bm4pdwZvCoBubA==
+X-Google-Smtp-Source: ADUXVKJ2DCdD4llYeht+/sFmOMrnivp69sosm2SMCILf9PvDJEsO6DBm+H2ThbZ9GrS2ofSKOBc8gdc2bx7FSFpqF68=
+X-Received: by 2002:adf:efcf:: with SMTP id i15-v6mr8783168wrp.195.1529272981081;
+ Sun, 17 Jun 2018 15:03:01 -0700 (PDT)
+MIME-Version: 1.0
+From: Zach Taylor <taylorzr@gmail.com>
+Date: Sun, 17 Jun 2018 17:02:48 -0500
+Message-ID: <CAAzoQ6+2jFcgdEHMLY995RLOrm-Lc0Brj6LQYSnsVLZcQ4Fzmg@mail.gmail.com>
+Subject: Testing testing
+To: "fooda@inthoughtdesign.com" <fooda@inthoughtdesign.com>
+Content-Type: multipart/alternative; boundary="000000000000cd51a4056edd9cce"
+
+--000000000000cd51a4056edd9cce
+Content-Type: text/plain; charset="UTF-8"
+
+I should see this email from address in logs
+
+--000000000000cd51a4056edd9cce
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr">I should see this email from address in logs</div>
+
+--000000000000cd51a4056edd9cce--

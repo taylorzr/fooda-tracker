@@ -1,0 +1,865 @@
+Return-Path: <zach.taylor@avant.com>
+Received: from mail-lf0-f44.google.com (mail-lf0-f44.google.com [209.85.215.44])
+ by inbound-smtp.us-east-1.amazonaws.com with SMTP id fvk50o0j771ktl62dvsc9trffads6gr430hr33o1
+ for fooda@inthoughtdesign.com;
+ Sun, 17 Jun 2018 22:45:09 +0000 (UTC)
+Received-SPF: pass (spfCheck: domain of avant.com designates 209.85.215.44 as permitted sender) client-ip=209.85.215.44; envelope-from=zach.taylor@avant.com; helo=mail-lf0-f44.google.com;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of avant.com designates 209.85.215.44 as permitted sender) client-ip=209.85.215.44; envelope-from=zach.taylor@avant.com; helo=mail-lf0-f44.google.com;
+ dkim=pass header.i=@avant.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFIbnNaN3BhTldJbFVzeGRBNStRM2h2d1kxeGdxYUNWekhCRTJBdzdtcVRNTnJ2Q3RYUFRZcy96ZEpOcFBKT1kxQUtLSXNiejYrUldabU8zMTRUWXljOEdCM0hsc1FYUWZ3L05HWTN5ZmMyNDNoV1BWMUc4WFJabC82K1dWbVlQMmhHQzRJdW9VakZYcDNsOEtUTS9KRnNlNlQvQ2o2UUFzTjVYaUNJMFZRYk1FVFNwa0RaS01zbjlsSXdHcms2OHh2Tng5NkozTlFTMW5iaVJhSnpUaC8yZUsxSTJiL0xMRDlYYjlCWG5iQ1doUmJYbHRuYjhneVpCWllReGhzWmxIT1RXNFhHM294N3ozeTU5SngrVHVaWVA5VExCMFR5YU5aYnhra0NlVkFsYUE9PQ==
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=ZwA1oTxco80HDLLnXdvKDzcodv5wMC2H4GqPFpS8NcKU4UFWY1cymueQdugJNb/cKnw9uMofMKB201ji99imFSHoEIK9h2FJJ0bxmCoyEpJ+Uu24hKl/3rK2gOXXEGY+fUBFclyiney8YXpn7P5jJsRYYZkf4pWUzg7XUZlYtDM=; c=relaxed/simple; s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1529275510; v=1; bh=bV6tuZUO3spNFbrL84cK8C9Gi8vSps3NSQd++N3gmYQ=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+Received: by mail-lf0-f44.google.com with SMTP id z207-v6so445299lff.9
+        for <fooda@inthoughtdesign.com>; Sun, 17 Jun 2018 15:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=avant.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=Cb/I1KJgdvUt/amOpFHSPowtgBwn58xz9rWWqvZnJYU=;
+        b=hf0/faXIkGcz/CiuWY/XyfBs07C6+Z+ZGdiobPkZaQPPqThdlf7qgeiEIOYcfL8v7W
+         9dDLRImoIcY9iRfG02Qo1nJ7XD+e1pVOiXV0D0Wnd4hYvmsb4JcEERKAQfTySkQvWDHl
+         fcdXErZxo5WXPDBV4G/fhN68LVLB+XWFD1Knw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=Cb/I1KJgdvUt/amOpFHSPowtgBwn58xz9rWWqvZnJYU=;
+        b=oNnJaVbEFSEcpgpw3fJbggfa8k/oOsFl2sI1uSFxmMod36bcLm0h7pKRkdw5id4Eix
+         hZf3ZTzgUIBWLEKc8F5Fhud4Tta6KWANNzgyszTu4vkSeHRJRnLNuVVLKV1G+SLnu30/
+         bH670XbmPQds7opcJBYyt1c/vxaaxbGUBNfcXOxpeYJCSai6soBcU5o/t3tRT8P84rei
+         vJj6SQy8+IO4Kkn2ybANvLS7AkjteSX23Wm5tCnCJVbq7cehpRfmqtQegmzjMIoSb05p
+         USH4jThg8Ja0fCIIN1lDzW103PAsLhZODywpVvMxKvAVQWKKPCNYTka+XoAilkWasNAp
+         Q8qg==
+X-Gm-Message-State: APt69E2a/nkNAdwKE0ZqPE8G6a5gpJLvgTZTfhtk8bTVjqofgSTXI/Tf
+	pS4WaiVzPSMk8psltbYBT+WdfZroJxOQ5F4WECjtn4U9AakJ1fPFy1WV0/9pdrxsGv6U4qY0EIf
+	2CUK1JY0pYlsBMDTPIpqN32g70JMbTBKm
+X-Google-Smtp-Source: ADUXVKIOPtHGVKabmkuMRw3sCj2C1vKtsb6Op8tMzR5KMXQBi8gGHVFzBborD4wAE9Acz2I3OomHME7FUiZ3S7esbBU=
+X-Received: by 2002:a19:ae11:: with SMTP id f17-v6mr5672450lfc.143.1529275507971;
+ Sun, 17 Jun 2018 15:45:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <5b23c62055325_168b08c9c104748@snappea-sidekiq-core-production-64c44f75bc-qczpc.mail>
+In-Reply-To: <5b23c62055325_168b08c9c104748@snappea-sidekiq-core-production-64c44f75bc-qczpc.mail>
+From: Zach Taylor <zach.taylor@avant.com>
+Date: Sun, 17 Jun 2018 17:44:55 -0500
+Message-ID: <CAEnLb6=A4fsNBdn+MLdyq9vDbheqkCh9v_DEap5tdkiz2_AN0A@mail.gmail.com>
+Subject: Fwd: Delivery Order Confirmation
+To: fooda@inthoughtdesign.com
+Content-Type: multipart/alternative; boundary="0000000000006ab622056ede333e"
+
+--0000000000006ab622056ede333e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ---------
+From: <info@fooda.com>
+Date: Fri, Jun 15, 2018 at 8:58 AM
+Subject: Delivery Order Confirmation
+To: <zach.taylor@avant.com>
+
+
+If you cannot read this email, please click here <#m_3713699329081185294_>
+We have received your order
+
+Sit back, relax and we'll take it from here.
+Where
+Suite 1700 - Kitchen, 222 N LaSalle,
+Chicago, IL 60601
+When
+Friday, Jun 15th
+BETWEEN 11:45am-12:15pm
+Your Order
+Blackwood BBQ
+Blackwood Chopped Salad
+*Buttermilk Ranch*
+
+$5.00
+------------------------------
+Subtotal
+$5.00
+Tax
+$0.59
+Employer Subsidy
+- $5.59
+Total
+$0.00
+Download the Fooda Mobile App!
+<https://mandrillapp.com/track/click/3165442/itunes.apple.com?p=3DeyJzIjoiU=
+UZZR2NvMEFOVmRxVFA2QUNPcDN2dWpfUHpNIiwidiI6MSwicCI6IntcInVcIjozMTY1NDQyLFwi=
+dlwiOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvaXR1bmVzLmFwcGxlLmNvbVxcXC91c1xcXC9=
+hcHBcXFwvZm9vZGFcXFwvaWQ0NzY2NjAyNzY_bXQ9OFwiLFwiaWRcIjpcIjg2YjYwYWRmMjgzZj=
+RjMTQ5M2Y0YmJjNzk2NDUxZTQwXCIsXCJ1cmxfaWRzXCI6W1wiZDRhYjY2ZDg0YjljNWZkZjI2Y=
+WFjNjNhNDllN2MzYjU0ZTQ2MjY1NFwiXX0ifQ>
+<https://mandrillapp.com/track/click/3165442/play.google.com?p=3DeyJzIjoiZT=
+UyNHc3aGoxVE1DYXd0cmo0VWpVZVFUQTJRIiwidiI6MSwicCI6IntcInVcIjozMTY1NDQyLFwid=
+lwiOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvcGxheS5nb29nbGUuY29tXFxcL3N0b3JlXFxc=
+L2FwcHNcXFwvZGV0YWlscz9pZD1jb20udm9rYWwuZm9vZGFcIixcImlkXCI6XCI4NmI2MGFkZjI=
+4M2Y0YzE0OTNmNGJiYzc5NjQ1MWU0MFwiLFwidXJsX2lkc1wiOltcImFkYTJjMWJmM2VlZjAwMj=
+Q3MDNiMmI1N2YyY2YyNzdhNTYwMjJiNTVcIl19In0>
+Find us at Fooda.com
+<https://mandrillapp.com/track/click/3165442/www.fooda.com?p=3DeyJzIjoiUzFV=
+OW9TNWpLeXhXTW9wUllIMkViSDVZb2owIiwidiI6MSwicCI6IntcInVcIjozMTY1NDQyLFwidlw=
+iOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvd3d3LmZvb2RhLmNvbVxcXC9cIixcImlkXCI6XC=
+I4NmI2MGFkZjI4M2Y0YzE0OTNmNGJiYzc5NjQ1MWU0MFwiLFwidXJsX2lkc1wiOltcIjYzNjk0N=
+DhkNzBhY2QwYWNkMWQwMDBkNmRmNTRmMzNlOWM0OTc0MjRcIl19In0>
+=C2=A9 2018 Fooda, Inc. All rights reserved.
+
+
+--=20
+[image: Inline image 9]
+
+*Zach Taylor* | Software Engineer
+Avant.com <http://avant.com/> | 222 N. LaSalle St., Ste. 1700 | Chicago, IL
+60601
+
+--=20
+This e-mail is only intended for the person(s) to whom it is addressed and=
+=20
+may contain confidential information. =C2=A0Any unauthorized review, use,=
+=20
+disclosure, or distribution is prohibited. If you received this e-mail in=
+=20
+error, please notify the sender by reply e-mail and then delete this=20
+message and any attachments from your system. Thank you for your=20
+cooperation.
+
+--0000000000006ab622056ede333e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><br><div class=3D"gmail_quote"><div dir=3D"ltr">------=
+---- Forwarded message ---------<br>From:  &lt;<a href=3D"mailto:info@fooda=
+.com">info@fooda.com</a>&gt;<br>Date: Fri, Jun 15, 2018 at 8:58 AM<br>Subje=
+ct: Delivery Order Confirmation<br>To:  &lt;<a href=3D"mailto:zach.taylor@a=
+vant.com">zach.taylor@avant.com</a>&gt;<br></div><br><br><u></u>
+
+
+
+
+
+
+
+<div style=3D"background:#f7f5f2">
+
+<table bgcolor=3D"#f7f5f2" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ class=3D"m_3713699329081185294backgroundTable" width=3D"100%">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294devicewidth" width=3D"600">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" bgcolor=3D"#f7f5f2" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" width=3D"582">
+<tbody>
+<tr>
+<td height=3D"7" style=3D"font-size:1px;line-height:1px" width=3D"100%"></t=
+d>
+</tr>
+
+
+<tr>
+<td align=3D"right" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans=
+-serif;font-size:10px;color:rgb(153,153,153)" valign=3D"middle">
+If you cannot read this email, please
+<a class=3D"m_3713699329081185294hlite" href=3D"#m_3713699329081185294_" st=
+yle=3D"text-decoration:none;color:#009e9d">click here</a>
+</td>
+</tr>
+
+
+<tr>
+<td height=3D"7" style=3D"font-size:1px;line-height:1px" width=3D"100%"></t=
+d>
+</tr>
+
+
+<tr>
+<td bgcolor=3D"#ffffff" height=3D"30" style=3D"font-size:1px;line-height:1p=
+x;border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3;border-top:1=
+px solid #e9e6e3" width=3D"100%"></td>
+</tr>
+
+
+<tr>
+<td align=3D"center" bgcolor=3D"#ffffff" style=3D"border-left:1px solid #e9=
+e6e3;border-right:1px solid #e9e6e3">
+<img alt=3D"" border=3D"0" height=3D"25" src=3D"https://s3.amazonaws.com/sn=
+appea-public/shared/foodalogonew.png" style=3D"border:none;outline:none;tex=
+t-decoration:none;margin:0 auto" width=3D"130">
+</td>
+</tr>
+
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,=
+sans-serif;font-size:15px;color:#a39b95;text-align:center;line-height:30px;=
+border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3">
+<h1 class=3D"m_3713699329081185294tagline" style=3D"font-weight:normal;font=
+-size:30px;color:#000000;margin-bottom:0">We <span class=3D"m_3713699329081=
+185294mobile-hide">have</span> received your order</h1>
+<p class=3D"m_3713699329081185294secondary-tag" style=3D"text-transform:upp=
+ercase">Sit back, relax and we&#39;ll take it from here.</p>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" class=3D"m_3713699329081185294emhide" height=3D"30"=
+ style=3D"font-size:1px;line-height:1px;border-left:1px solid #e9e6e3;borde=
+r-right:1px solid #e9e6e3" width=3D"100%"></td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"border-left:1px solid #e9e6e3;border-right=
+:1px solid #e9e6e3">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" clas=
+s=3D"m_3713699329081185294removeMobile" width=3D"40">
+<tbody>
+<tr>
+<td bgcolor=3D"#ffffff" height=3D"15" style=3D"font-size:1px;line-height:1p=
+x" width=3D"100%"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"border-left:1px solid #e9e6e3;border-right=
+:1px solid #e9e6e3">
+<table align=3D"center" style=3D"width:500px" width=3D"500">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" width=3D"290">
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+<tbody>
+
+<tr>
+<th align=3D"center" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,san=
+s-serif;font-size:18px;color:#f3634a;text-align:left;text-transform:upperca=
+se;line-height:20px" valign=3D"middle">
+<span>Where</span>
+</th>
+</tr>
+
+<tr>
+
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:16px;color:#000000;text-align:left;line-height:20px" valign=3D"top">
+Suite 1700 - Kitchen,
+222 N LaSalle,<br>
+<span style=3D"color:#a39b95">Chicago,
+IL
+60601</span>
+</td>
+</tr>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+</tbody>
+</table>
+</td>
+<td align=3D"center" valign=3D"top" width=3D"290">
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+<tbody>
+
+<tr>
+<th style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;color:#f3634a;text-align:left;text-transform:uppercase;line-height:20=
+px" valign=3D"top">
+<span>When</span>
+</th>
+</tr>
+
+<tr>
+
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:16px;color:#000000;text-align:left;line-height:20px" valign=3D"top">
+Friday, Jun 15th<br>
+<span style=3D"font-size:10px;color:#a39b95">BETWEEN</span>
+11:45am-12:15pm
+</td>
+</tr>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#f9f8f7" height=3D"20" style=3D"font-size:1px;line-height:1p=
+x;border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3" width=3D"10=
+0%"></td>
+</tr>
+<tr>
+<td align=3D"center" bgcolor=3D"#f9f8f7" style=3D"border-left:1px solid #e9=
+e6e3;border-right:1px solid #e9e6e3">
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"500">
+<tbody>
+<tr>
+<td class=3D"m_3713699329081185294order-title" style=3D"font-family:&#39;Op=
+en Sans&#39;,Helvetica,sans-serif;font-size:30px;font-weight:300;color:#f36=
+34a;text-align:left;line-height:20px">
+Your Order
+</td>
+</tr>
+
+<tr>
+<td height=3D"50" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+
+
+
+<tbody><tr>
+<td>
+
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" clas=
+s=3D"m_3713699329081185294product-thumb" width=3D"80">
+<tbody>
+
+<tr>
+<td align=3D"center" height=3D"75" width=3D"75">
+<img alt=3D"" border=3D"0" height=3D"75" width=3D"75" class=3D"m_3713699329=
+081185294col3img" style=3D"display:block;border:none;outline:none;text-deco=
+ration:none" src=3D"https://snappea-prod-private.s3.amazonaws.com/assets/or=
+iginal/74121.jpg?1519139583">
+</td>
+</tr>
+<tr>
+<td>
+
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"80">
+<tbody>
+
+<tr>
+<td height=3D"30" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-s=
+erif;font-size:10px;color:#a39b95;text-align:center;line-height:11px" width=
+=3D"100%">
+Blackwood BBQ
+</td>
+</tr>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" clas=
+s=3D"m_3713699329081185294emhide" width=3D"15">
+<tbody>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"170">
+<tbody>
+<tr>
+<td>
+
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"170">
+<tbody>
+
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;color:#000000;text-align:left;line-height:20px">
+Blackwood Chopped Salad
+</td>
+</tr>
+
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:15px;color:#a39b95;text-align:left;line-height:20px">
+<strong>Buttermilk Ranch</strong>
+<br>
+<br>
+<i></i>
+</td>
+</tr>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"1">
+<tbody>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-wrap" width=3D"170">
+<tbody>
+<tr>
+<td>
+
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294price" width=3D"170">
+<tbody>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:30px;font-weight:100;color:#a39b95;text-align:right;line-height:20px">
+<span style=3D"vertical-align:super;font-size:20px"></span>$5.00
+</td>
+</tr>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+
+
+
+<tr>
+<td>
+<hr style=3D"margin-top:0;margin-bottom:20px;color:#e7e7e7;border-color:#e7=
+e7e7;border-bottom:0;opacity:.4">
+</td>
+</tr>
+</tbody></table>
+<table align=3D"center" bgcolor=3D"#f9f8f7" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" class=3D"m_3713699329081185294devicewidth" width=3D"580">
+<tbody>
+<tr>
+<td style=3D"font-size:1px;line-height:1px" width=3D"100%">
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-breakdown" width=3D"350">
+<tbody>
+
+<tr class=3D"m_3713699329081185294mobile-spacing" style=3D"display:none">
+<td height=3D"15" style=3D"font-size:10px;text-align:center;line-height:1px=
+" width=3D"100%"></td>
+</tr>
+<tr>
+<td style=3D"height:30px">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"170">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+Subtotal
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-wrap" valign=3D"top" width=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294price" width=3D"85">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+$5.00
+</td>
+</tr>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style=3D"height:30px">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"170">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+Tax
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-wrap" width=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294price" width=3D"85">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+$0.59
+</td>
+</tr>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style=3D"height:30px">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"170">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+Employer Subsidy
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-wrap" width=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294price" width=3D"85">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;font-weight:300;color:#a39b95;text-align:right">
+- $5.59
+</td>
+</tr>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style=3D"height:30px">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"170">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;color:#000000;text-align:right">
+Total
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table align=3D"right" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"m_3713699329081185294price-wrap" width=3D"170">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294price" width=3D"85">
+<tbody>
+<tr>
+<td style=3D"font-family:&#39;Open Sans&#39;,Helvetica,sans-serif;font-size=
+:18px;color:#000000;text-align:right">
+$0.00
+</td>
+</tr>
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" height=3D"20" style=3D"font-size:1px;line-height:1p=
+x;border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3" width=3D"10=
+0%"></td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,=
+sans-serif;font-size:15px;color:#a39b95;text-align:center;line-height:0px;b=
+order-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3">
+<h1 style=3D"font-weight:300;font-size:18px;color:#5c5c5c;margin-top:30px;m=
+argin-bottom:15px">Download the Fooda Mobile App!</h1>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" height=3D"20" style=3D"font-size:1px;line-height:1p=
+x;border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3" width=3D"10=
+0%"></td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"border-left:1px solid #e9e6e3;border-right=
+:1px solid #e9e6e3">
+<table align=3D"center" style=3D"width:500px" width=3D"500">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" width=3D"290">
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+<tbody>
+
+<tr>
+<td bgcolor=3D"#ffffff" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,=
+sans-serif;font-size:15px;color:#a39b95;line-height:0px;border-left:1px sol=
+id #e9e6e3;border-right:1px solid #e9e6e3" width=3D"100">
+<a href=3D"https://mandrillapp.com/track/click/3165442/itunes.apple.com?p=
+=3DeyJzIjoiUUZZR2NvMEFOVmRxVFA2QUNPcDN2dWpfUHpNIiwidiI6MSwicCI6IntcInVcIjoz=
+MTY1NDQyLFwidlwiOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvaXR1bmVzLmFwcGxlLmNvbVx=
+cXC91c1xcXC9hcHBcXFwvZm9vZGFcXFwvaWQ0NzY2NjAyNzY_bXQ9OFwiLFwiaWRcIjpcIjg2Yj=
+YwYWRmMjgzZjRjMTQ5M2Y0YmJjNzk2NDUxZTQwXCIsXCJ1cmxfaWRzXCI6W1wiZDRhYjY2ZDg0Y=
+jljNWZkZjI2YWFjNjNhNDllN2MzYjU0ZTQ2MjY1NFwiXX0ifQ" target=3D"_blank">
+<img alt=3D"" border=3D"0" height=3D"30" src=3D"https://s3.amazonaws.com/sn=
+appea-public/shared/AppleBadge.png" style=3D"display:block;border:none;outl=
+ine:none;text-decoration:none" width=3D"100">
+</a>
+</td>
+<td bgcolor=3D"#ffffff" style=3D"line-height:0px" width=3D"10"></td>
+<td bgcolor=3D"#ffffff" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,=
+sans-serif;font-size:15px;color:#a39b95;line-height:0px;border-left:1px sol=
+id #e9e6e3;border-right:1px solid #e9e6e3" width=3D"100">
+<a href=3D"https://mandrillapp.com/track/click/3165442/play.google.com?p=3D=
+eyJzIjoiZTUyNHc3aGoxVE1DYXd0cmo0VWpVZVFUQTJRIiwidiI6MSwicCI6IntcInVcIjozMTY=
+1NDQyLFwidlwiOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvcGxheS5nb29nbGUuY29tXFxcL3=
+N0b3JlXFxcL2FwcHNcXFwvZGV0YWlscz9pZD1jb20udm9rYWwuZm9vZGFcIixcImlkXCI6XCI4N=
+mI2MGFkZjI4M2Y0YzE0OTNmNGJiYzc5NjQ1MWU0MFwiLFwidXJsX2lkc1wiOltcImFkYTJjMWJm=
+M2VlZjAwMjQ3MDNiMmI1N2YyY2YyNzdhNTYwMjJiNTVcIl19In0" target=3D"_blank">
+<img alt=3D"" border=3D"0" height=3D"30" src=3D"https://s3.amazonaws.com/sn=
+appea-public/shared/AndroidBadge.png" style=3D"display:block;border:none;ou=
+tline:none;text-decoration:none" width=3D"100">
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor=3D"#ffffff" height=3D"40" style=3D"font-size:1px;line-height:1p=
+x;border-left:1px solid #e9e6e3;border-right:1px solid #e9e6e3;border-botto=
+m:1px solid #e9e6e3" width=3D"100%"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table bgcolor=3D"#f7f5f2" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ id=3D"m_3713699329081185294backgroundTable" width=3D"100%">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294devicewidth" width=3D"580">
+<tbody>
+<tr>
+<td>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"m_3713699329081185294devicewidth" width=3D"580">
+<tbody>
+
+<tr>
+<td height=3D"15" style=3D"font-size:1px;line-height:1px" width=3D"100%"></=
+td>
+</tr>
+
+
+<tr>
+<td align=3D"center" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,san=
+s-serif;font-size:14px;color:rgb(153,153,153);text-align:center" valign=3D"=
+middle">
+Find us at <a href=3D"https://mandrillapp.com/track/click/3165442/www.fooda=
+.com?p=3DeyJzIjoiUzFVOW9TNWpLeXhXTW9wUllIMkViSDVZb2owIiwidiI6MSwicCI6IntcIn=
+VcIjozMTY1NDQyLFwidlwiOjEsXCJ1cmxcIjpcImh0dHBzOlxcXC9cXFwvd3d3LmZvb2RhLmNvb=
+VxcXC9cIixcImlkXCI6XCI4NmI2MGFkZjI4M2Y0YzE0OTNmNGJiYzc5NjQ1MWU0MFwiLFwidXJs=
+X2lkc1wiOltcIjYzNjk0NDhkNzBhY2QwYWNkMWQwMDBkNmRmNTRmMzNlOWM0OTc0MjRcIl19In0=
+" style=3D"color:#3c5fab;text-decoration:none" target=3D"_blank">Fooda.com<=
+/a>
+</td>
+</tr>
+<tr>
+<td align=3D"center" style=3D"font-family:&#39;Open Sans&#39;,Helvetica,san=
+s-serif;font-size:10px;color:rgb(153,153,153);text-align:center" valign=3D"=
+middle">
+=C2=A9
+2018
+Fooda, Inc.  All rights reserved.
+</td>
+</tr>
+
+
+<tr>
+<td height=3D"5" style=3D"font-size:1px;line-height:1px" width=3D"100%"></t=
+d>
+</tr>
+
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<img src=3D"https://mandrillapp.com/track/open.php?u=3D3165442&amp;id=3D86b=
+60adf283f4c1493f4bbc796451e40" height=3D"1" width=3D"1"></div>
+</div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr" class=3D"gma=
+il_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div><div=
+ dir=3D"ltr"><div><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div dir=3D"l=
+tr"><div dir=3D"ltr"><div style=3D"color:rgb(136,136,136);font-size:12.8000=
+001907349px"><div dir=3D"ltr"><span style=3D"font-size:12.8px"><div dir=3D"=
+ltr" style=3D"color:rgb(34,34,34);font-size:12.8px"><img src=3D"cid:ii_151b=
+19b9af0b9fdd" alt=3D"Inline image 9" width=3D"112" height=3D"16" style=3D"m=
+argin-right:0px"><br></div><div dir=3D"ltr" style=3D"color:rgb(34,34,34);fo=
+nt-size:12.8px"><b style=3D"font-size:12.8px;color:rgb(102,102,102)"><br></=
+b></div><div dir=3D"ltr" style=3D"color:rgb(34,34,34);font-size:12.8px"><b =
+style=3D"font-size:12.8px;color:rgb(102,102,102)">Zach Taylor</b><span styl=
+e=3D"font-size:12.8px;color:rgb(102,102,102)">=C2=A0|=C2=A0</span><span sty=
+le=3D"font-size:12.8px;color:rgb(102,102,102)">Software Engineer</span><br>=
+</div></span><div style=3D"font-size:12.8px;color:rgb(34,34,34)"><font styl=
+e=3D"font-size:12.8px;font-family:Arial,sans-serif"><a href=3D"http://avant=
+.com/" style=3D"color:rgb(61,133,198);font-size:12.8px" target=3D"_blank"><=
+font color=3D"#3d85c6">Avant.com</font></a><font color=3D"#666666">=C2=A0|=
+=C2=A0</font></font><span style=3D"color:rgb(102,102,102);font-family:Arial=
+;font-size:12.6667px">222 N. LaSalle St., Ste. 1700 |=C2=A0Chicago, IL 6060=
+1</span></div></div></div></div></div></div></div></div></div></div></div><=
+/div></div></div></div>
+
+<br>
+This e-mail is only intended for the person(s) to whom it is addressed and =
+may contain confidential information. =C2=A0Any unauthorized review, use, d=
+isclosure, or distribution is prohibited. If you received this e-mail in er=
+ror, please notify the sender by reply e-mail and then delete this message =
+and any attachments from your system. Thank you for your cooperation.
+--0000000000006ab622056ede333e--

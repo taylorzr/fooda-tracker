@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eu
+
+GOOS=linux go build -o hello hello.go
+zip lambda.zip hello
+aws lambda update-function-code --function-name fooda --zip-file fileb://lambda.zip
