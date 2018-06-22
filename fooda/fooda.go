@@ -1,43 +1,71 @@
 package fooda
 
 import (
-	"time"
-  "github.com/jinzhu/gorm"
-  _ "github.com/jinzhu/gorm/dialects/sqlite"
+	"bytes"
+	"fmt"
+	"net/http"
+	"os"
+
+	"github.com/taylorzr/fooda-tracker/db"
 )
 
-type (
-	Order struct {
-		gorm.Model
-		OrderedAt time.Time `json:"ordered_at"`
-		User User
-		UserId int
+var hipchatToken string
+
+func init() {
+	hipchatToken = os.Getenv("HIPCHAT_TOKEN")
+}
+
+func Remind() ([]string, error) {
+	emails, err := db.GetUsers()
+
+	if err != nil {
+		return nil, err
 	}
 
-	Run struct {
-		gorm.Model
+	fmt.Printf("All emails: %s\n", emails)
+
+	orderers, err := db.GetTodaysOrders()
+
+	fmt.Printf("All orderers: %s\n", orderers)
+
+	if err != nil {
+		return nil, err
 	}
 
-	User struct {
-		gorm.Model
-		Email string `json:"email"`
+	forgetters := []string{}
+
+	for _, email := range emails {
+		found := false
+
+		fmt.Printf("Email: %s\n", email)
+
+		for _, orderer := range orderers {
+			fmt.Printf("Orderer: %s\n", orderer)
+			if email == orderer {
+				found = true
+			}
+		}
+
+		if !found {
+			forgetters = append(forgetters, email)
+		}
 	}
-)
 
-func Forgetters(users []User, orders []Order) []User {
-	// orderers := []User{}
+	url := fmt.Sprintf("http://api.hipchat.com/v2/room/test/notification?auth_token=%s", hipchatToken)
 
-	// TODO: Should probably just do this in sql
-	// Find users who don't have an order for today
-	// Would be an opportunity to practice SQL
-	for _, _ = range orders {
-		// orders = append(orderers, order.User)
-		// Check if they have ordered today
-		// If not save to list
+	var json = []byte(fmt.Sprintf(`{"color": "purple", "message_format": "text", "message":"You forgot to order fooda!\n%s"}`, forgetters))
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(json))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	_, err = client.Do(req)
+
+	if err != nil {
+		panic(err)
 	}
 
-	// check all users vs orderers
+	fmt.Println("almost done")
 
-	// return orderers
-	return users
+	return forgetters, nil
 }

@@ -9,6 +9,8 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/taylorzr/fooda-tracker/db"
+	// "github.com/taylorzr/fooda-tracker/fooda"
 )
 
 type Email struct {
@@ -40,6 +42,7 @@ func HandleRequest(ctx context.Context, snsEvent events.SNSEvent) {
 		t := extractTime(email.Content)
 		fmt.Printf("Time: %s\n", t)
 
+		db.SaveOrder(email.Mail.Source, t)
 		// TODO: Save stuff to dynamodb
 
 		// fmt.Printf("\n\nContent:\n%s", email.Content)

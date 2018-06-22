@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -eu
+
+app=remind
+GOOS=linux go build -o $app $app.go
+zip $app.zip $app
+aws lambda update-function-code --function-name fooda_$app --zip-file fileb://$app.zip
